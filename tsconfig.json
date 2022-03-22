@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "module": "es6",
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "target": "es6"
+  },
+  "extends": "@tsconfig/node16/tsconfig.json",
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules"]
+}
