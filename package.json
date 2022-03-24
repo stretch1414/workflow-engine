@@ -1,5 +1,5 @@
 {
-  "name": "mobu-roasters-api",
+  "name": "workflow-engine",
   "version": "0.0.0",
   "author": {
     "name": "Joel",
@@ -9,7 +9,7 @@
   "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/stretch1414/mobu-roasters-api"
+    "url": "https://github.com/stretch1414/workflow-engine"
   },
   "type": "module",
   "scripts": {
