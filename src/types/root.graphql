@@ -12,3 +12,7 @@ type Query {
   authors: [Author]
   books: [Book]
 }
+
+type Mutation {
+  executePython: String
+}
