@@ -11,5 +11,5 @@
   "env": {
     "NODE_ENV": "development"
   },
-  "ext": "py,graphql,js,json,ts"
+  "ext": "graphql,js,json,ts"
 }
