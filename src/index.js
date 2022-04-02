@@ -6,6 +6,8 @@ import {
   shouldRenderGraphiQL,
   sendResult,
 } from 'graphql-helix';
+import path from 'path';
+import { access, constants, mkdir } from 'fs';
 
 import { getToken } from './auth';
 import typeDefs from './typeDefs';
@@ -13,6 +15,22 @@ import resolvers from './resolvers';
 // import context from './context';
 
 import { makeExecutableSchema } from '@graphql-tools/schema';
+
+// Initialize tmp directory with database and python folders
+access(path.resolve('src/tmp'), constants.F_OK, (err) => {
+  if (err) {
+    mkdir(path.resolve('src/tmp/database'), { recursive: true }, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+    mkdir(path.resolve('src/tmp/python'), { recursive: true }, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+  }
+});
 
 const app = express();
 
