@@ -14,5 +14,9 @@ type Query {
 }
 
 type Mutation {
-  executePython: String
+  executePython(input: ExecutePythonInput!): String
+}
+
+input ExecutePythonInput {
+  functionName: String!
 }
