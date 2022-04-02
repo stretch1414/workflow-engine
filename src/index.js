@@ -90,3 +90,9 @@ app.use('/graphql', async (req, res) => {
 
 // Start the server:
 app.listen(4000, () => console.log('Server started on port 4000'));
+
+process.once('SIGUSR2', () => {
+  // gracefulShutdown(function () {
+  process.kill(process.pid, 'SIGUSR2');
+  // });
+});
