@@ -9,26 +9,24 @@ const resolvers = {
 
       const dataToWrite = [];
 
-      dataToWrite.push('import sys\n');
-      dataToWrite.push('import pandas as pd\n');
-      dataToWrite.push('def main():\n');
-      dataToWrite.push('\tdataset = pd.read_excel(sys.argv[1])\n');
-      dataToWrite.push('\tdataset = dataset.fillna(0)\n');
+      dataToWrite.push('import sys');
+      dataToWrite.push('import pandas as pd');
+      dataToWrite.push('def main():');
+      dataToWrite.push('\tdataset = pd.read_excel(sys.argv[1])');
+      dataToWrite.push('\tdataset = dataset.fillna(0)');
       dataToWrite.push(
-        `\tcount = len(dataset[dataset['${columnName}'] == '${columnValue}'])\n`
+        `\tcount = len(dataset[dataset['${columnName}'] == '${columnValue}'])`
       );
-      dataToWrite.push("\tprint('count %s' % count)\n");
-      dataToWrite.push('main()\n');
+      dataToWrite.push("\tprint('count %s' % count)");
+      dataToWrite.push('main()');
 
-      const pathName = path.resolve('src/lib/python', filename);
-      console.log('pathName: ', pathName);
-      const writeStream = fs.createWriteStream(pathName);
+      const pathName = path.resolve('src/tmp/python', filename);
 
-      for (const line of dataToWrite) {
-        writeStream.write(line);
-      }
-
-      writeStream.end();
+      fs.writeFile(pathName, dataToWrite.join('\n'), (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
 
       return pathName;
     },
@@ -38,7 +36,7 @@ const resolvers = {
       const returnData = [];
       return new Promise((resolve, reject) => {
         const proc = spawn('py', ['-u', functionName, filename], {
-          cwd: 'src/lib/python',
+          cwd: 'src/tmp/python',
         });
 
         proc.stdout.on('data', (data) => {
@@ -63,14 +61,10 @@ const resolvers = {
   },
   Query: {
     async pythonFiles(obj, args, ctx) {
-      const pathName = path.resolve('src/lib/python');
-      const files = fs.readdirSync(pathName, { withFileTypes: true });
+      const pathName = path.resolve('src/tmp/python');
+      const files = fs.readdirSync(pathName);
 
-      console.log('files: ', files);
-
-      return files
-        .map(({ name }) => name)
-        .filter((name) => name.includes('.py'));
+      return files.map(({ name }) => name);
     },
   },
 };
