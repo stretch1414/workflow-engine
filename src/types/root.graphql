@@ -4,6 +4,7 @@ type Query {
 
 type Mutation {
   buildCount(input: BuildCountInput!): String!
+  buildPercentage(input: BuildPercentageInput!): String!
   executePython(input: ExecutePythonInput!): [String!]!
 }
 
@@ -11,6 +12,14 @@ input BuildCountInput {
   filename: String!
   columnName: String!
   columnValue: String!
+}
+
+input BuildPercentageInput {
+  filename: String!
+  numeratorColumnName: String!
+  numeratorColumnValue: String!
+  denominatorColumnName: String!
+  denominatorColumnValue: String!
 }
 
 input ExecutePythonInput {
