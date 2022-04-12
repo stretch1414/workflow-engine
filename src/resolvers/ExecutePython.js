@@ -1,6 +1,7 @@
 import { spawn } from 'child_process';
 import path from 'path';
 import fs from 'fs';
+import { readdir } from 'fs/promises';
 
 const resolvers = {
   Mutation: {
@@ -101,9 +102,14 @@ const resolvers = {
   Query: {
     async pythonFiles(obj, args, ctx) {
       const pathName = path.resolve('src/tmp/python');
-      const files = fs.readdirSync(pathName);
 
-      return files.map(({ name }) => name);
+      try {
+        const files = await readdir(pathName);
+
+        return files;
+      } catch (err) {
+        console.error(err);
+      }
     },
   },
 };

@@ -1,13 +1,15 @@
 scalar Upload
 
 type Query {
-  pythonFiles: [String!]!
+  pythonFiles: [String]
+  dataFiles: [String!]!
 }
 
 type Mutation {
   buildCount(input: BuildCountInput!): String!
   buildPercentage(input: BuildPercentageInput!): String!
   executePython(input: ExecutePythonInput!): [String!]!
+  uploadFile(input: UploadFileInput!): String!
 }
 
 input BuildCountInput {
@@ -27,4 +29,8 @@ input BuildPercentageInput {
 input ExecutePythonInput {
   functionName: String!
   filename: String!
+}
+
+input UploadFileInput {
+  file: Upload!
 }
