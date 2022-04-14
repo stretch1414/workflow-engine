@@ -14,6 +14,7 @@ import typeDefs from './typeDefs';
 import resolvers from './resolvers';
 // import context from './context';
 
+import { envelop, useSchema } from '@envelop/core';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { graphqlUploadExpress } from 'graphql-upload';
 
@@ -35,9 +36,15 @@ access(path.resolve('src/tmp'), constants.F_OK, (err) => {
 
 const app = express();
 
-const schema = makeExecutableSchema({
-  typeDefs,
-  resolvers,
+const getEnveloped = envelop({
+  plugins: [
+    useSchema(
+      makeExecutableSchema({
+        typeDefs,
+        resolvers,
+      })
+    ),
+  ],
 });
 
 app.use(express.json());
@@ -67,6 +74,10 @@ app.use(
   '/graphql',
   graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }),
   async (req, res) => {
+    const { parse, validate, contextFactory, execute, schema } = getEnveloped({
+      req,
+    });
+
     // Create a generic Request object that can be consumed by Graphql Helix's API
     const request = {
       body: req.body,
@@ -89,6 +100,10 @@ app.use(
         variables,
         request,
         schema,
+        parse,
+        validate,
+        execute,
+        contextFactory,
       });
 
       // processRequest returns one of three types of results depending on how the server should respond
