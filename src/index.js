@@ -1,4 +1,7 @@
 import express from 'express';
+import path from 'path';
+import { access, constants, mkdir } from 'fs';
+
 import {
   getGraphQLParameters,
   processRequest,
@@ -6,17 +9,14 @@ import {
   shouldRenderGraphiQL,
   sendResult,
 } from 'graphql-helix';
-import path from 'path';
-import { access, constants, mkdir } from 'fs';
+import { envelop, useLogger, useSchema, useTiming } from '@envelop/core';
+import { makeExecutableSchema } from '@graphql-tools/schema';
+import { graphqlUploadExpress } from 'graphql-upload';
 
 import { getToken } from './auth';
 import typeDefs from './typeDefs';
 import resolvers from './resolvers';
 // import context from './context';
-
-import { envelop, useSchema } from '@envelop/core';
-import { makeExecutableSchema } from '@graphql-tools/schema';
-import { graphqlUploadExpress } from 'graphql-upload';
 
 // Initialize tmp directory with database and python folders
 access(path.resolve('src/tmp'), constants.F_OK, (err) => {
@@ -44,30 +44,12 @@ const getEnveloped = envelop({
         resolvers,
       })
     ),
+    useLogger(),
+    useTiming(),
   ],
 });
 
 app.use(express.json());
-
-// const resolveOptions = async (req, res, reqParams) => {
-//   return {
-//     schema,
-//     context: await context(req, res, reqParams),
-//     graphiql: true,
-//   };
-// };
-
-// app
-//   .use(
-//     jwt({
-//       secret: process.env.TOKEN_SECRET,
-//       audience,
-//       issuer,
-//       algorithms: ['RS256'],
-//     }),
-//     getToken
-//   )
-//   .unless({ path: ['/token'] });
 
 // Use those to handle incoming requests:
 app.use(
@@ -124,6 +106,17 @@ app.use(
   }
 );
 
+// app
+//   .use(
+//     jwt({
+//       secret: process.env.TOKEN_SECRET,
+//       audience,
+//       issuer,
+//       algorithms: ['RS256'],
+//     }),
+//     getToken
+//   )
+//   .unless({ path: ['/token'] });
 // app.get('/token', getToken);
 
 // Start the server:
