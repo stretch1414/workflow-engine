@@ -1,3 +1,6 @@
+# Custom for package
+tmp/
+
 # Logs
 logs
 *.log
