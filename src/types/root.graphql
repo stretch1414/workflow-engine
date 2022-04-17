@@ -1,3 +1,4 @@
+directive @skipAuth on FIELD_DEFINITION
 scalar Upload
 
 type Query {
@@ -42,12 +43,12 @@ type User {
 }
 
 type Query {
-  me: User
+  me: User!
 }
 
 type Mutation {
-  login(input: LoginInput!): LoginResponse!
-  signup(input: SignupInput!): SignupResponse!
+  login(input: LoginInput!): LoginResponse! @skipAuth
+  signup(input: SignupInput!): SignupResponse! @skipAuth
 }
 
 input LoginInput {
@@ -62,11 +63,14 @@ input SignupInput {
   password: String!
 }
 
-union LoginResponse = LoginResponse_Success
+union LoginResponse = LoginResponse_Success | LoginResponse_InvalidCredentials
 
 type LoginResponse_Success {
-  token: String!
-  user: User!
+  token: String! @skipAuth
+}
+
+type LoginResponse_InvalidCredentials {
+  reason: String
 }
 
 union SignupResponse = SignupResponse_Success | SignupResponse_AlreadyExists
@@ -74,4 +78,8 @@ union SignupResponse = SignupResponse_Success | SignupResponse_AlreadyExists
 type SignupResponse_Success {
   token: String!
   user: User!
+}
+
+type SignupResponse_AlreadyExists {
+  reason: String
 }

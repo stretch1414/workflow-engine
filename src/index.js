@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import path from 'path';
 import { access, constants, mkdir } from 'fs';
+import crypto from 'crypto';
 
 import {
   getGraphQLParameters,
@@ -46,11 +47,11 @@ const getEnveloped = envelop({
         resolvers,
       })
     ),
-    useLogger(),
+    // useLogger(),
     useTiming(),
     useGenericAuth({
       resolveUserFn,
-      validateUser,
+      // validateUser,
       mode: 'protect-all',
     }),
   ],
