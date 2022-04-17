@@ -7,11 +7,11 @@ export const databaseByEmailSingleton = {
 
 export const generatePassword = async (password) => {
   try {
-    const hashedPassword = await argon2.hash(password, {
+    const passwordHash = await argon2.hash(password, {
       type: argon2.argon2id,
     });
 
-    return hashedPassword;
+    return passwordHash;
   } catch (err) {
     console.error('Error generating password', err);
   }

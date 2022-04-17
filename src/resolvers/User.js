@@ -32,7 +32,7 @@ const resolvers = {
       }
 
       // Validate password with password hash
-      const passwordMatch = await verifyPassword(user.hashedPassword, password);
+      const passwordMatch = await verifyPassword(user.passwordHash, password);
 
       if (!passwordMatch) {
         return responses.invalidCredentials();
@@ -64,7 +64,7 @@ const resolvers = {
       }
 
       // Generate password hash
-      const hashedPassword = await generatePassword(password);
+      const passwordHash = await generatePassword(password);
 
       // TODO - Generate email verification string
       // TODO - Generate email hash
@@ -73,8 +73,10 @@ const resolvers = {
       databaseByEmailSingleton[email] = {
         id: crypto.randomBytes(16).toString('hex'),
         email,
-        hashedPassword,
+        passwordHash,
       };
+
+      console.log('database', databaseByEmailSingleton);
 
       // TODO - Optionally generate a token and log the user in?
 
