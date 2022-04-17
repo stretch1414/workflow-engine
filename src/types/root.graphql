@@ -34,3 +34,44 @@ input ExecutePythonInput {
 input UploadFileInput {
   file: Upload!
 }
+
+type User {
+  id: ID!
+  # TODO - Replace with an EmailAddress scalar
+  email: String!
+}
+
+type Query {
+  me: User
+}
+
+type Mutation {
+  login(input: LoginInput!): LoginResponse!
+  signup(input: SignupInput!): SignupResponse!
+}
+
+input LoginInput {
+  # TODO - Replace with an EmailAddress scalar
+  email: String!
+  password: String!
+}
+
+input SignupInput {
+  # TODO - Replace with an EmailAddress scalar
+  email: String!
+  password: String!
+}
+
+union LoginResponse = LoginResponse_Success
+
+type LoginResponse_Success {
+  token: String!
+  user: User!
+}
+
+union SignupResponse = SignupResponse_Success | SignupResponse_AlreadyExists
+
+type SignupResponse_Success {
+  token: String!
+  user: User!
+}

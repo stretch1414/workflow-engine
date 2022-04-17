@@ -17,16 +17,18 @@
   },
   "dependencies": {
     "@envelop/core": "^2.3.1",
+    "@envelop/generic-auth": "^4.2.1",
     "@graphql-tools/load-files": "^6.5.2",
     "@graphql-tools/merge": "^8.2.1",
     "@graphql-tools/schema": "^8.3.1",
     "argon2": "^0.28.3",
+    "dotenv": "^16.0.0",
     "express": "^4.17.1",
-    "express-jwt": "^6.1.0",
     "glob": "^7.2.0",
     "graphql": "^16.1.0",
     "graphql-helix": "^1.12.0",
-    "graphql-upload": "^13.0.0"
+    "graphql-upload": "^13.0.0",
+    "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {
     "@graphql-eslint/eslint-plugin": "^3.2.0",

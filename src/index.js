@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import path from 'path';
 import { access, constants, mkdir } from 'fs';
@@ -10,10 +11,11 @@ import {
   sendResult,
 } from 'graphql-helix';
 import { envelop, useLogger, useSchema, useTiming } from '@envelop/core';
+import { useGenericAuth } from '@envelop/generic-auth';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { graphqlUploadExpress } from 'graphql-upload';
 
-import { getToken } from './auth';
+import { resolveUserFn, validateUser } from './auth';
 import typeDefs from './typeDefs';
 import resolvers from './resolvers';
 // import context from './context';
@@ -46,6 +48,11 @@ const getEnveloped = envelop({
     ),
     useLogger(),
     useTiming(),
+    useGenericAuth({
+      resolveUserFn,
+      validateUser,
+      mode: 'protect-all',
+    }),
   ],
 });
 
@@ -105,19 +112,6 @@ app.use(
     }
   }
 );
-
-// app
-//   .use(
-//     jwt({
-//       secret: process.env.TOKEN_SECRET,
-//       audience,
-//       issuer,
-//       algorithms: ['RS256'],
-//     }),
-//     getToken
-//   )
-//   .unless({ path: ['/token'] });
-// app.get('/token', getToken);
 
 // Start the server:
 app.listen(4000, () => console.log('Server started on port 4000'));
