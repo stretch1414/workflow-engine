@@ -52,7 +52,7 @@ const getEnveloped = envelop({
     useGenericAuth({
       resolveUserFn,
       // validateUser,
-      mode: 'protect-all',
+      mode: 'protect-granular',
     }),
   ],
 });

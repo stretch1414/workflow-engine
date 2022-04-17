@@ -1,16 +1,16 @@
-directive @skipAuth on FIELD_DEFINITION
+directive @auth on FIELD_DEFINITION
 scalar Upload
 
 type Query {
-  pythonFiles: [String]
-  dataFiles: [String!]!
+  pythonFiles: [String] @auth
+  dataFiles: [String!]! @auth
 }
 
 type Mutation {
-  buildCount(input: BuildCountInput!): String!
-  buildPercentage(input: BuildPercentageInput!): String!
-  executePython(input: ExecutePythonInput!): [String!]!
-  uploadFile(input: UploadFileInput!): String!
+  buildCount(input: BuildCountInput!): String! @auth
+  buildPercentage(input: BuildPercentageInput!): String! @auth
+  executePython(input: ExecutePythonInput!): [String!]! @auth
+  uploadFile(input: UploadFileInput!): String! @auth
 }
 
 input BuildCountInput {
@@ -43,12 +43,12 @@ type User {
 }
 
 type Query {
-  me: User!
+  me: User! @auth
 }
 
 type Mutation {
-  login(input: LoginInput!): LoginResponse! @skipAuth
-  signup(input: SignupInput!): SignupResponse! @skipAuth
+  login(input: LoginInput!): LoginResponse!
+  signup(input: SignupInput!): SignupResponse!
 }
 
 input LoginInput {
@@ -66,7 +66,7 @@ input SignupInput {
 union LoginResponse = LoginResponse_Success | LoginResponse_InvalidCredentials
 
 type LoginResponse_Success {
-  token: String! @skipAuth
+  token: String!
 }
 
 type LoginResponse_InvalidCredentials {
