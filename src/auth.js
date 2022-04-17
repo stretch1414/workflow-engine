@@ -79,7 +79,6 @@ export const tradeTokenForUser = async (token) => {
 };
 
 export const resolveUserFn = async (context) => {
-  // console.log('context', context);
   const token = context.req.headers.authorization;
 
   try {
