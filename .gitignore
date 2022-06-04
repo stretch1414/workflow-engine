@@ -1,5 +1,6 @@
 # Custom for package
 tmp/
+.vscode
 
 # Logs
 logs
