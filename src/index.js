@@ -3,6 +3,7 @@ import express from 'express';
 import path from 'path';
 import { access, constants, mkdir } from 'fs';
 import crypto from 'crypto';
+import once from 'lodash.once';
 
 import {
   getGraphQLParameters,
@@ -115,10 +116,24 @@ app.use(
 );
 
 // Start the server:
-app.listen(4000, () => console.log('Server started on port 4000'));
+const server = app.listen(4000, () =>
+  console.log('Server started on port 4000')
+);
 
-process.once('SIGUSR2', () => {
-  // gracefulShutdown(function () {
-  process.kill(process.pid, 'SIGUSR2');
-  // });
+// Attempting to gracefully shutdown, but only want to call this code once
+const shutdown = once(() => {
+  console.log('Shutdown event received');
+  server.close(async () => {
+    console.log('Http server closed');
+  });
 });
+
+process.on('SIGUSR2', shutdown);
+process.on('SIGTERM', shutdown);
+process.on('SIGINT', shutdown);
+
+// process.once('SIGUSR2', () => {
+//   gracefulShutdown(function () {
+//   process.kill(process.pid, 'SIGUSR2');
+//   });
+// });
